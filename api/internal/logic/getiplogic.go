@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"crypto/md5"
 	"fmt"
 	"github.com/mohong122/ip2region/binding/golang/ip2region"
 	"io"
@@ -46,6 +47,7 @@ func (l *GetIpLogic) getDb() *ip2region.Ip2Region {
 
 func (l *GetIpLogic) GetIp(req types.Request) (*types.Response, error) {
 	var region = l.getDb()
+	defer l.closeDb()
 	ip, err := region.MemorySearch(req.IpAddr)
 	if err != nil {
 		return l.sendFail(), err
@@ -74,7 +76,11 @@ func (l *GetIpLogic) sendFail() *types.Response {
 }
 
 func (l *GetIpLogic) openDb(path string) (*ip2region.Ip2Region, error) {
+	if p := l.readLock(path); p != "" {
+		path = p
+	}
 	if strings.Contains(path, "http") {
+		var url = path
 		res, err := http.Get(path)
 		if err != nil {
 			return nil, err
@@ -83,6 +89,7 @@ func (l *GetIpLogic) openDb(path string) (*ip2region.Ip2Region, error) {
 		if err != nil {
 			return nil, err
 		}
+		defer l.setLock(getMd5(url) + "=>" + path)
 	}
 	return ip2region.New(path)
 }
@@ -90,16 +97,10 @@ func (l *GetIpLogic) openDb(path string) (*ip2region.Ip2Region, error) {
 func (l *GetIpLogic) saveTemp(closer io.ReadCloser, timestamp int64) (string, error) {
 	var err error
 	var tmpDir = l.svcCtx.Config.TempDir
-	var file = fmt.Sprintf("%s/%d_ip2region.db", tmpDir, timestamp)
-	if strings.Contains(file,"//") {
-		file = strings.ReplaceAll(file,"//","/")
-	}
-	if strings.Contains(file,"\\/") {
-		file = strings.ReplaceAll(file,"\\/",string(os.PathSeparator))
-	}
+	var file = joinPath(tmpDir, fmt.Sprintf("%d_ip2region.db", timestamp))
 	defer closer.Close()
-	file ,err= filepath.Abs(file)
-	if err!=nil {
+	file, err = filepath.Abs(file)
+	if err != nil {
 		return "", err
 	}
 	dir := filepath.Dir(file)
@@ -129,4 +130,83 @@ func (l *GetIpLogic) saveTemp(closer io.ReadCloser, timestamp int64) (string, er
 		return file, nil
 	}
 	return "", err
+}
+
+func (l *GetIpLogic) closeDb() {
+	if l.ipDb != nil {
+		l.ipDb.Close()
+	}
+}
+
+func (l *GetIpLogic) isLock() bool {
+	var lock = l.getLockFile()
+	if _, err := os.Stat(lock); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
+func (l *GetIpLogic) getLockFile() string {
+	f,err:=filepath.Abs(joinPath(l.svcCtx.Config.TempDir, "db.lock"))
+	if err!=nil {
+		logx.Error(err)
+		return ""
+	}
+	return f
+}
+
+// 设置存储锁
+func (l *GetIpLogic) readLock(args ...string) string {
+	if l.isLock() {
+		data, err := ioutil.ReadFile(l.getLockFile())
+		if err != nil {
+			return ""
+		}
+		info := string(data)
+		arr := strings.Split(info, "=>")
+		if _, err := os.Stat(arr[1]); os.IsExist(err) {
+			return ""
+		}
+		// url 地址不一致
+		if len(args) > 0 && getMd5(args[0]) != arr[0] {
+			return ""
+		}
+		return arr[1]
+	}
+	return ""
+}
+
+// 自动锁,不更新ip db
+func (l *GetIpLogic) setLock(db string) bool {
+	if l.isLock() {
+		return false
+	}
+	fs, err := os.OpenFile(l.getLockFile(), os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
+	if err != nil {
+		logx.Error(err)
+		return false
+	}
+	defer fs.Close()
+	n, err := fs.Write([]byte(db))
+	if  err == nil && n > 0 {
+		return true
+	}
+	return false
+}
+
+// 路径处理
+func joinPath(root, sub string) string {
+	var file = filepath.Join(root, sub)
+	if strings.Contains(file, "//") {
+		file = strings.ReplaceAll(file, "//", "/")
+	}
+	if strings.Contains(file, "\\/") {
+		file = strings.ReplaceAll(file, "\\/", string(os.PathSeparator))
+	}
+	return file
+}
+
+// 获取md5
+func getMd5(str string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(str)))
 }
