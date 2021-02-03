@@ -19,10 +19,10 @@ function clean() {
 }
 
 function docs() {
-    if [ -f ip-service.json ];then
-        rm -f ip-service.json
+    if [ -f serviceGetIp.json ];then
+        rm -f serviceGetIp.json
     fi
-    goctl api plugin -plugin goctl-swagger="swagger -filename ip-service.json" -api api/ipService.api -dir .
+    goctl api plugin -plugin goctl-swagger="swagger -filename serviceGetIp.json" -api api/ipService.api -dir .
 }
 
 function apiDocs() {
