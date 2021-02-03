@@ -53,6 +53,12 @@ error response :
 curl localhost:28000?ip=xxx.xxx.xxx.xxx
 ```
 
+> 演示站点接口
+
+```http request
+https://api.word-server.com/service/ip
+```
+
 > 开源协议 MIT
 
 欢迎 大家 fork
