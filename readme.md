@@ -37,3 +37,18 @@ error response :
     "data": null
 }
 ```
+> 快速使用
+
+1. 安装 docker
+
+2. 安装 docker-compose
+
+3. 运行
+```bash
+   run.sh start
+```
+4. 
+
+> 开源协议 MIT
+
+欢迎 大家 fork

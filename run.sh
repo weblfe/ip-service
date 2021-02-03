@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-
 action=${1}
-
+function init() {
+    if [ ! -f "./docker/etc" ];then
+      mkdir .docker/etc/ -p  && cp api/etc/ipserver.yaml .docker/etc/ipserver.yaml
+    fi
+}
 function start() {
     docker-compose up -d
 }
@@ -24,6 +27,10 @@ function main(){
   ;;
   "clean")
   clean
+  ;;
+  init)
+  init
+  ;;
   *)
   echo "run <command>"
   echo "command: "

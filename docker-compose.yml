@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     image: weblinuxgame/ipservice
     volumes:
-      - ".docker/tmp/db:/app/tmp/db"
+      - ".docker/tmp/db:/app/tmp/db:rw"
       - ".docker/etc:/app/etc"
     ports:
     -  "28000:8080"
