@@ -2,7 +2,7 @@
 action=${1}
 function init() {
     if [ ! -f "./docker/etc" ];then
-      mkdir .docker/etc/ -p  && cp api/etc/ipserver.yaml .docker/etc/ipserver.yaml
+      mkdir .docker/etc/ -p  && cp ./api/etc/ipservice.yaml .docker/etc/ipservice.yaml
     fi
 }
 function start() {
