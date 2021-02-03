@@ -1,0 +1,133 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "ipService",
+    "version": "v1.0.0"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/service/ip": {
+      "get": {
+        "operationId": "",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/response"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accessKey",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ipService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ResponseData": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string"
+        },
+        "city_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "country": {
+          "type": "string"
+        },
+        "district": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "ISP": {
+          "type": "string"
+        }
+      },
+      "title": "ResponseData",
+      "required": [
+        "ip",
+        "city_id",
+        "country",
+        "district",
+        "province",
+        "city",
+        "ISP"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "AccessKey": {
+          "type": "string"
+        },
+        "IpAddr": {
+          "type": "string"
+        }
+      },
+      "title": "request",
+      "required": [
+        "accessKey",
+        "ip"
+      ]
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "$ref": "#/definitions/ResponseData"
+        }
+      },
+      "title": "response",
+      "required": [
+        "msg",
+        "code",
+        "data"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
