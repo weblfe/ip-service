@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 action=${1}
 function init() {
-    if [ ! -f "./docker/etc" ];then
-      mkdir .docker/etc/ -p  && cp ./api/etc/ipservice.yaml .docker/etc/ipservice.yaml
+    if [ ! -f "./.docker/etc" ];then
+      mkdir ./.docker/etc/ -p  && cp ./api/etc/ipService.yaml .docker/etc/ipService.yaml
     fi
 }
 function start() {
