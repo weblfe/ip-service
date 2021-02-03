@@ -45,9 +45,13 @@ error response :
 
 3. 运行
 ```bash
-   run.sh start
+   run.sh init  && run.sh start
 ```
-4. 
+4. 请求
+
+```http
+curl localhost:28000?ip=xxx.xxx.xxx.xxx
+```
 
 > 开源协议 MIT
 

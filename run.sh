@@ -36,6 +36,7 @@ function main(){
   echo "command: "
   echo "   start : start service docker    "
   echo "   restart : restart service       "
+  echo "   init  : init service config for docker "
   echo "   clean :  stop and service docker"
     ;;
   esac
