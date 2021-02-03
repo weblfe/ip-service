@@ -1,0 +1,34 @@
+syntax = "v1"
+
+info(
+	title: ipService
+	desc: ip service for golang
+	author: "weblinuxgame"
+	email: "15975798646@163.com"
+)
+
+type request {
+	AccessKey string `query:"book,optional=1" desc:"应用accessKey"`
+	IpAddr    string `query:"ip,optional=1" desc:"ip地址"`
+}
+
+type ResponseData {
+	Ip       string `json:"ip" desc:"ip"`
+	CityId   int64  `json:"city_id" desc:"城市Id"`
+	Country  string `json:"country" desc:"国家"`
+	District string `json:"district" desc:"区域"`
+	Province string `json:"province" desc:"省份"`
+	City     string `json:"city" desc:"城市"`
+	ISP      string `json:"ISP" desc:"ISP"`
+}
+
+type response {
+	Msg  string       `json:"msg" desc:"业务提示"`
+	Code int          `json:"code" desc:"业务码"`
+	Data ResponseData `json:"data" desc:"消息体"`
+}
+
+service ipService {
+	@handler GetIp
+	get /service/ip(request) returns(response)
+}
