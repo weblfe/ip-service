@@ -12,10 +12,9 @@ https://github.com/flyaction/ipdatabase
 
 ```http
 
-curl  http://micro.word-server.com/service/ip?ip=xxx.xxx.xxx.xxx
+curl  http://api.word-server.com/service/ip?ip=xxx.xxx.xxx.xxx
 
 success response :
-
 {
     "msg": "OK",
     "code": 0,
@@ -30,7 +29,7 @@ success response :
     }
 }
 
-error response :
+error response:
 {
     "msg": "ip format error",
     "code": 500,
@@ -57,6 +56,23 @@ curl localhost:28000?ip=xxx.xxx.xxx.xxx
 
 ```http request
 https://api.word-server.com/service/ip
+```
+> 安装protoc-gen-go
+
+```
+go get -u github.com/golang/protobuf/protoc-gen-go
+```
+
+> goctl 安装 
+
+```
+GO111MODULE=on GOPROXY=https://goproxy.cn/,direct go get -u github.com/tal-tech/go-zero/tools/goctl
+```
+
+> goctl swagger plugin 安装
+
+``` 
+GO111MODULE=on GOPROXY=https://goproxy.cn/,direct go get -u github.com/zeromicro/goctl-swagger
 ```
 
 > 开源协议 MIT
