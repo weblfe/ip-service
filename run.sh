@@ -26,7 +26,7 @@ function docs() {
 }
 
 function apiDocs() {
-    docker run --rm -p 8081:8080 -e SWAGGER_JSON=/app/ipService.json -v $PWD:/app swaggerapi/swagger-ui
+    docker run --rm -p 8081:8080 -e SWAGGER_JSON=/app/ipService.json -v $PWD:/usr/share/nginx/html/app swaggerapi/swagger-ui
 }
 
 function main(){
