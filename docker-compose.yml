@@ -7,6 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: weblinuxgame/ipservice
+    container_name: ipService
     volumes:
       - ".docker/tmp/db:/app/tmp/db:rw"
       - ".docker/etc:/app/etc"
