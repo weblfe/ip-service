@@ -80,7 +80,7 @@ function dev() {
 # 更新代码
 function push() {
     git add . && \
-    git commit -am "`date +"%Y-%m-%d"` `git status -s`" && \
+    git commit -am "`date +"%Y-%m-%d%H:%M.%S"` `git status -s`" && \
     git pull && \
     git push origin "${branch}" -u
 }

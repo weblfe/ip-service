@@ -8,9 +8,16 @@ services:
       dockerfile: ${DOCKERFILE:-Dockerfile}
     image: weblinuxgame/ipservice:${SERVICE_VERSION:-latest}
     container_name: ipService
+    hostname: ipService
     volumes:
       - ".docker/tmp/db:/app/tmp/db:rw"
       - ".docker/etc:/app/etc"
     ports:
     -  "28000:8080"
     restart: always
+    networks:
+      - bongolive
+
+networks:
+  bongolive:
+    external: true
