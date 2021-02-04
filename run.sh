@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 action="${1}"
+# 分支
+branch="master"
 # osx-x86_64, win64, linux-aarch_64, linux-ppcle_64, linux-s390x, linux-x86_64
 platform="linux-x86_64"
 # get https://github.com/protocolbuffers/protobuf/releases/ all version
@@ -60,8 +62,26 @@ function apiDocs() {
     docker run --rm -p 8081:8080 -e SWAGGER_JSON=/app/ipService.json -v $PWD:/usr/share/nginx/html/app swaggerapi/swagger-ui
 }
 
+function dev() {
+    go run api/ipService.go -f api/etc/ipService.yaml
+}
+
+# 更新代码
+function push() {
+    git add . && \
+    git commit -am "`date +"%Y-%m-%d"` `git status -s`" && \
+    git pull && \
+    git push origin "${branch}" -u
+}
+
 function main(){
   case "$action" in
+  "install")
+    install
+  ;;
+  "dev")
+    dev
+  ;;
   "start")
     start
    ;;
@@ -83,6 +103,9 @@ function main(){
   "update")
   update
   ;;
+  "push")
+  push
+  ;;
   *)
   echo "run <command>"
   echo "command: "
@@ -93,6 +116,9 @@ function main(){
   echo "   init  : init service config for docker "
   echo "   clean :  stop and service docker"
   echo "   update : update code for api    "
+  echo "   dev   : run dev for api         "
+  echo "   install  : install all tools    "
+  echo "   push  : git push code           "
     ;;
   esac
 }
