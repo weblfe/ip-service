@@ -12,6 +12,8 @@ protoc_version="3.14.0"
 protoc_save="/usr/local/bin"
 # protoc url
 protoc_download_url="https://github.com/protocolbuffers/protobuf/releases/download/v${protoc_version}/protoc-${protoc_version}-${platform}.zip"
+# network
+network="bongolive"
 
 # docker version
 if [ "${2}x" == "x" ];then
@@ -43,6 +45,9 @@ function install() {
 function init() {
     if [ ! -f "./.docker/etc" ];then
       mkdir ./.docker/etc/ -p  && cp ./api/etc/ipService.yaml .docker/etc/ipService.yaml
+    fi
+    if [ "`docker network inspect "${network}" | grep "No such network:" |grep -v grep`x" == "x" ];then
+      docker network create "${network}"
     fi
 }
 
