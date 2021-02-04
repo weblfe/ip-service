@@ -7,13 +7,24 @@ branch="master"
 platform="linux-x86_64"
 # get https://github.com/protocolbuffers/protobuf/releases/ all version
 protoc_version="3.14.0"
+
+# protoc save dir
 protoc_save="/usr/local/bin"
+# protoc url
 protoc_download_url="https://github.com/protocolbuffers/protobuf/releases/download/v${protoc_version}/protoc-${protoc_version}-${platform}.zip"
 
+# docker version
 if [ "${2}x" == "x" ];then
   export  SERVICE_VERSION=latest
 else
   export SERVICE_VERSION="${2}"
+fi
+
+# dockerfile
+if [ "${3}x" == "x" ];then
+  export DOCKERFILE="${3}"
+else
+  export DOCKERFILE=Dockerfile
 fi
 
 # 安装tools

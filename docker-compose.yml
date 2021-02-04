@@ -5,7 +5,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ${DOCKERFILE:-Dockerfile}
     image: weblinuxgame/ipservice:${SERVICE_VERSION:-latest}
     container_name: ipService
     volumes:
