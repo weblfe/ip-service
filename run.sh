@@ -22,9 +22,9 @@ fi
 
 # dockerfile
 if [ "${3}x" == "x" ];then
-  export DOCKERFILE="${3}"
-else
   export DOCKERFILE=Dockerfile
+else
+  export DOCKERFILE="${3}"
 fi
 
 # 安装tools
