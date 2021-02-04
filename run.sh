@@ -25,6 +25,10 @@ function docs() {
     goctl api plugin -plugin goctl-swagger="swagger -filename serviceGetIp.json" -api api/ipService.api -dir .
 }
 
+function update() {
+      goctl api go  -api api/ipService.api -dir api/
+}
+
 function apiDocs() {
     docker run --rm -p 8081:8080 -e SWAGGER_JSON=/app/ipService.json -v $PWD:/usr/share/nginx/html/app swaggerapi/swagger-ui
 }
@@ -49,6 +53,9 @@ function main(){
   "apiDocs")
   apiDocs
   ;;
+  "update")
+  update
+  ;;
   *)
   echo "run <command>"
   echo "command: "
@@ -58,6 +65,7 @@ function main(){
   echo "   apiDocs  : see swagger ui       "
   echo "   init  : init service config for docker "
   echo "   clean :  stop and service docker"
+  echo "   update : update code for api    "
     ;;
   esac
 }

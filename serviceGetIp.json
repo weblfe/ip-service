@@ -22,7 +22,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/response"
+              "$ref": "#/definitions/GetIpResponse"
             }
           }
         },
@@ -47,7 +47,44 @@
     }
   },
   "definitions": {
-    "ResponseData": {
+    "GetIpRequest": {
+      "type": "object",
+      "properties": {
+        "AccessKey": {
+          "type": "string"
+        },
+        "IpAddr": {
+          "type": "string"
+        }
+      },
+      "title": "GetIpRequest",
+      "required": [
+        "accessKey",
+        "ip"
+      ]
+    },
+    "GetIpResponse": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "data": {
+          "$ref": "#/definitions/GetIpResponseData"
+        }
+      },
+      "title": "GetIpResponse",
+      "required": [
+        "msg",
+        "code",
+        "data"
+      ]
+    },
+    "GetIpResponseData": {
       "type": "object",
       "properties": {
         "ip": {
@@ -73,7 +110,7 @@
           "type": "string"
         }
       },
-      "title": "ResponseData",
+      "title": "GetIpResponseData",
       "required": [
         "ip",
         "city_id",
@@ -82,43 +119,6 @@
         "province",
         "city",
         "ISP"
-      ]
-    },
-    "request": {
-      "type": "object",
-      "properties": {
-        "AccessKey": {
-          "type": "string"
-        },
-        "IpAddr": {
-          "type": "string"
-        }
-      },
-      "title": "request",
-      "required": [
-        "accessKey",
-        "ip"
-      ]
-    },
-    "response": {
-      "type": "object",
-      "properties": {
-        "msg": {
-          "type": "string"
-        },
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "data": {
-          "$ref": "#/definitions/ResponseData"
-        }
-      },
-      "title": "response",
-      "required": [
-        "msg",
-        "code",
-        "data"
       ]
     }
   },

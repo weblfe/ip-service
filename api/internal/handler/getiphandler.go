@@ -20,7 +20,7 @@ var headerArr = []string{"X-REAL-IP", "X-FORWARDED-FOR", "REMOTE-ADDR"}
 
 func GetIpHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.Request
+		var req types.GetIpRequest
 		if !setQueryForm(r, &req) {
 			if err := httpx.Parse(r, &req); err != nil {
 				httpx.OkJson(w, errorRes(err))
@@ -67,7 +67,7 @@ func getRealIp(r *http.Request) string {
 }
 
 // 设置Query form
-func setQueryForm(r *http.Request, request *types.Request) bool {
+func setQueryForm(r *http.Request, request *types.GetIpRequest) bool {
 	var query, err = url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		logx.Info(err)
@@ -90,7 +90,7 @@ func setQueryForm(r *http.Request, request *types.Request) bool {
 
 // 错误
 func errorRes(err error) interface{} {
-	return &types.Response{
+	return &types.GetIpResponse{
 		Msg:  err.Error(),
 		Code: 500,
 		Data: nil,

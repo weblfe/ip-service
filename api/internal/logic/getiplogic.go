@@ -45,7 +45,7 @@ func (l *GetIpLogic) getDb() *ip2region.Ip2Region {
 	return l.ipDb
 }
 
-func (l *GetIpLogic) GetIp(req types.Request) (*types.Response, error) {
+func (l *GetIpLogic) GetIp(req types.GetIpRequest) (*types.GetIpResponse, error) {
 	var region = l.getDb()
 	defer l.closeDb()
 	ip, err := region.MemorySearch(req.IpAddr)
@@ -55,11 +55,11 @@ func (l *GetIpLogic) GetIp(req types.Request) (*types.Response, error) {
 	return l.sendSuccess(req.IpAddr, ip), nil
 }
 
-func (l *GetIpLogic) sendSuccess(ip string, info ip2region.IpInfo) *types.Response {
-	return &types.Response{
+func (l *GetIpLogic) sendSuccess(ip string, info ip2region.IpInfo) *types.GetIpResponse {
+	return &types.GetIpResponse{
 		Msg:  "OK",
 		Code: 0,
-		Data: &types.ResponseData{
+		Data: &types.GetIpResponseData{
 			Ip: ip, CityId: info.CityId,
 			Country: info.Country, District: info.Region,
 			Province: info.Province, City: info.City, ISP: info.ISP,
@@ -67,8 +67,8 @@ func (l *GetIpLogic) sendSuccess(ip string, info ip2region.IpInfo) *types.Respon
 	}
 }
 
-func (l *GetIpLogic) sendFail() *types.Response {
-	return &types.Response{
+func (l *GetIpLogic) sendFail() *types.GetIpResponse {
+	return &types.GetIpResponse{
 		Msg:  "failed",
 		Data: nil,
 		Code: 1400,

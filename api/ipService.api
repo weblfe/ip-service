@@ -8,12 +8,12 @@ info(
 	version: "v1.0.0"
 )
 
-type request {
+type GetIpRequest {
 	AccessKey string `query:"accessKey,optional=1" desc:"应用accessKey" name:"accessKey"`
 	IpAddr    string `query:"ip,optional=1" desc:"ip地址" name:"ip"`
 }
 
-type ResponseData {
+type GetIpResponseData {
 	Ip       string `json:"ip" desc:"ip" name:"ip"`
 	CityId   int64  `json:"city_id" desc:"城市Id" name:"city_id"`
 	Country  string `json:"country" desc:"国家" name:"country"`
@@ -23,16 +23,16 @@ type ResponseData {
 	ISP      string `json:"ISP" desc:"ISP" name:"ISP"`
 }
 
-type response {
-	Msg  string       `json:"msg" desc:"业务提示" name:"msg"`
-	Code int          `json:"code" desc:"业务码" name:"code"`
-	Data ResponseData `json:"data" desc:"消息体" name:"data"`
+type GetIpResponse {
+	Msg  string             `json:"msg" desc:"业务提示" name:"msg"`
+	Code int                `json:"code" desc:"业务码" name:"code"`
+	Data *GetIpResponseData `json:"data" desc:"消息体" name:"data"`
 }
 
 service ipService {
-    @doc (
-        summary: "ip地理位置信息解析"
-    )
+	@doc (
+		summary: "ip地理位置信息解析"
+	)
 	@handler GetIp
-	get /service/ip(request) returns(response)
+	get /service/ip(GetIpRequest) returns(GetIpResponse)
 }
