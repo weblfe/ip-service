@@ -5,4 +5,7 @@ Database: https://data-oss-hewei.oss-cn-shenzhen.aliyuncs.com/database/ip2region
 TempDir: tmp/db/
 Mode: dev
 Log:
-  Level: error
+  Mode: file
+  Path: logs
+  Compress: true
+  KeepDays: 3

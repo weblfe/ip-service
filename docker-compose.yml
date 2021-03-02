@@ -12,6 +12,7 @@ services:
     volumes:
       - ".docker/tmp/db:/app/tmp/db:rw"
       - ".docker/etc:/app/etc"
+      - ".docker/logs:/app/logs:rw"
     ports:
     -  "28000:8080"
     restart: always
