@@ -38,7 +38,7 @@ func (l *GetIpLogic) getDb() *ip2region.Ip2Region {
 	var err error
 	if l.ipDb == nil {
 		l.ipDb, err = l.openDb(l.svcCtx.Config.Database)
-		if err != nil {
+		if svc.AssertError(err) {
 			l.Error(err)
 		}
 	}
@@ -49,7 +49,7 @@ func (l *GetIpLogic) GetIp(req types.GetIpRequest) (*types.GetIpResponse, error)
 	var region = l.getDb()
 	defer l.closeDb()
 	ip, err := region.MemorySearch(req.IpAddr)
-	if err != nil {
+	if svc.AssertError(err){
 		return l.sendFail(), err
 	}
 	return l.sendSuccess(req.IpAddr, ip), nil
@@ -117,16 +117,16 @@ func (l *GetIpLogic) saveTemp(closer io.ReadCloser, timestamp int64) (string, er
 	var buf []byte
 	var n int
 	fs, err = os.OpenFile(file, os.O_CREATE|os.O_RDWR|os.O_TRUNC, os.ModePerm)
-	if err != nil {
+	if svc.AssertError(err) {
 		return "", err
 	}
 	buf, err = ioutil.ReadAll(closer)
-	if err != nil {
+	if svc.AssertError(err) {
 		return "", err
 	}
 	n, err = fs.Write(buf)
 	defer fs.Close()
-	if err == nil && n > 0 {
+	if !svc.AssertError(err) && n > 0 {
 		return file, nil
 	}
 	return "", err
@@ -148,7 +148,7 @@ func (l *GetIpLogic) isLock() bool {
 
 func (l *GetIpLogic) getLockFile() string {
 	f,err:=filepath.Abs(joinPath(l.svcCtx.Config.TempDir, "db.lock"))
-	if err!=nil {
+	if svc.AssertError(err) {
 		logx.Error(err)
 		return ""
 	}
@@ -182,8 +182,7 @@ func (l *GetIpLogic) setLock(db string) bool {
 		return false
 	}
 	fs, err := os.OpenFile(l.getLockFile(), os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
-	if err != nil {
-		logx.Error(err)
+	if svc.AssertError(err){
 		return false
 	}
 	defer fs.Close()

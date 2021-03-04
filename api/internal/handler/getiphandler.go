@@ -22,7 +22,7 @@ func GetIpHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.GetIpRequest
 		if !setQueryForm(r, &req) {
-			if err := httpx.Parse(r, &req); err != nil {
+			if err := httpx.Parse(r, &req); svc.AssertError(err) {
 				httpx.OkJson(w, errorRes(err))
 				return
 			}
@@ -37,7 +37,7 @@ func GetIpHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 		resp, err := l.GetIp(req)
-		if err != nil {
+		if svc.AssertError(err) {
 			httpx.OkJson(w, errorRes(err))
 		} else {
 			httpx.OkJson(w, resp)
@@ -69,7 +69,7 @@ func getRealIp(r *http.Request) string {
 // 设置Query form
 func setQueryForm(r *http.Request, request *types.GetIpRequest) bool {
 	var query, err = url.ParseQuery(r.URL.RawQuery)
-	if err != nil {
+	if svc.AssertError(err) {
 		logx.Info(err)
 		return false
 	}
