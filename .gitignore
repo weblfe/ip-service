@@ -2,3 +2,4 @@
 api/tmp/db/*
 data/
 .docker
+logs/*
