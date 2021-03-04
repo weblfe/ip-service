@@ -11,6 +11,7 @@ services:
     hostname: ipService
     volumes:
       - ".docker/tmp/db:/app/tmp/db:rw"
+      - ".docker/docs:/app/docs:rw"
       - ".docker/etc:/app/etc"
       - ".docker/logs:/app/logs:rw"
     ports:
