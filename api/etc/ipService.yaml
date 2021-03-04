@@ -3,6 +3,7 @@ Host: 0.0.0.0
 Port: 8080
 Database: https://data-oss-hewei.oss-cn-shenzhen.aliyuncs.com/database/ip2region.db
 TempDir: tmp/db/
+DocsPath: .docker/docs/swagger.json
 Mode: dev
 Log:
   Mode: file
