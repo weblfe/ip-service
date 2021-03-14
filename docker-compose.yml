@@ -14,6 +14,7 @@ services:
       - ".docker/docs:/app/docs:rw"
       - ".docker/etc:/app/etc"
       - ".docker/logs:/app/logs:rw"
+      - "/etc/localtime:/etc/localtime"
     ports:
     -  "28000:8080"
     restart: always
